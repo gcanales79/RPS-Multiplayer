@@ -1,0 +1,34 @@
+#player1Section {
+    height: 200px;
+    border: 1px black solid;
+    
+}
+
+#player2Section{
+    height: 200px;
+    border: 1px black solid;
+
+}
+
+#resultSection{
+    height: 200px;
+    border: 1px black solid;
+}
+
+#talkingZone{
+height: 100px;
+border: 1px black solid;
+}
+
+#title{
+    background-color:#90caf9;
+}
+
+body{
+    background-color: #e3f2fd;
+}
+
+#ShowplayerName{
+    font-weight: bold;
+}
+
