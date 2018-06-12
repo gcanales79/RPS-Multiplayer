@@ -44,15 +44,34 @@ checkPlayer2.once("value", function (snapshot) {
 });
 
 
-function player1Assign(){
-    $("#player1Section").empty();
-    var player1Div=$("<div>");
-    var rock1Div =$("<div>");
-    var paper1Div=$("<div>");
-    var scissors1Div=$("<div>");
-    var score1Div=$("<div>");
-    player1Div.text()
+function player1Assign(player1wins, player1losses) {
+    var rock1Div = $("<div>");
+    rock1Div.text("Rock");
+    var paper1Div = $("<div>");
+    paper1Div.text("Paper");
+    var scissors1Div = $("<div>");
+    scissors1Div.text("Scissors");
+    var score1Div = $("<div>");
+    score1Div.text("Wins: " + player1wins + " Losses: " + player1losses);
+    $("#player1Section").append(rock1Div);
+    $("#player1Section").append(paper1Div);
+    $("#player1Section").append(scissors1Div);
+    $("#player1Section").append(score1Div);
+}
 
+function player2Assign(player2wins, player2losses) {
+    var rock2Div = $("<div>");
+    rock2Div.text("Rock");
+    var paper2Div = $("<div>");
+    paper2Div.text("Paper");
+    var scissors2Div = $("<div>");
+    scissors2Div.text("Scissors");
+    var score2Div = $("<div>");
+    score2Div.text("Wins: " + player2wins + " Losses: " + player2losses);
+    $("#player2Section").append(rock2Div);
+    $("#player2Section").append(paper2Div);
+    $("#player2Section").append(scissors2Div);
+    $("#player2Section").append(score2Div);
 }
 
 
@@ -72,8 +91,9 @@ $("#startGame").on("click", function (event) {
             losses: player1losses,
             turn: turnplayer1,
         })
-    $("#ShowplayerName").html("Hi " + player1name + " you are player 1");
-    $("#player1Section").text(player1name);
+        $("#ShowplayerName").html("Hi " + player1name + " you are player 1");
+        $("#player1Section").text(player1name);
+        player1Assign(player1wins, player1losses);
 
 
         checkPlayer1.onDisconnect().remove();
@@ -81,28 +101,29 @@ $("#startGame").on("click", function (event) {
     if (player1Exists != null) {
         //Add player 2 name
         dataRef.ref("/players/1").on("value", function (snapshot) {
-           player1name=snapshot.val().name
-           console.log("El jugador 1 es: " + player1name);
-        
-        
-        console.log("Ponemos el jugador 2");
-        console.log("El jugador 1 es: " + player1name);
-        player2name = $("#playerName").val().trim();
-        $("#player1Section").text(player1name);
+            player1name = snapshot.val().name
+            console.log("El jugador 1 es: " + player1name);
 
-        dataRef.ref("/players/2").set({
-            name: player2name,
-            selection: player2selection,
-            wins: player2wins,
-            losses: player2losses,
-            turn: turnplayer2,
+
+            console.log("Ponemos el jugador 2");
+            console.log("El jugador 1 es: " + player1name);
+            player2name = $("#playerName").val().trim();
+            $("#player1Section").text(player1name);
+
+            dataRef.ref("/players/2").set({
+                name: player2name,
+                selection: player2selection,
+                wins: player2wins,
+                losses: player2losses,
+                turn: turnplayer2,
+            })
+            $("#ShowplayerName").html("Hi " + player2name + " you are player 2");
+            $("#player2Section").text(player2name);
+            player2Assign(player2wins, player2losses);
+
         })
-        $("#ShowplayerName").html("Hi " + player2name + " you are player 2");
-        $("#player2Section").text(player2name);
-        
-    })
         checkPlayer2.onDisconnect().remove();
-       
+
     }
 })
 
