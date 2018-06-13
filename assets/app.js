@@ -285,6 +285,14 @@ dataRef.ref("/players").on("child_changed", function (snapshot) {
             console.log(player2selection);
         })
 
+        $("#player2Selection").empty();
+        $("#player2Selection").html(player2selection);
+        $("#player2Selection").addClass("Selection");
+
+        $("#player1Selection").empty();
+        $("#player1Selection").html(player1selection);
+        $("#player1Selection").addClass("Selection");
+
         console.log("The answer is " + (player1selection == player2selection));
     
     }
