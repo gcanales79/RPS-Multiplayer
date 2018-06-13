@@ -23,7 +23,7 @@ var player2losses = 0;
 var player1Exists;
 var player2Exists;
 var turnplayer1 = 0;
-var turnplayer2 = 1;
+var turnplayer2 = 0;
 
 
 
@@ -84,6 +84,7 @@ function player2Assign(player2wins, player2losses) {
     score2Div.text("Wins: " + player2wins + " Losses: " + player2losses);
     var player2Status = $("<div>")
     player2Status.attr("id", "player2Status");
+    player2Status.text("Waiting for player 1 to choose");
     player2Selection.append(player2Status);
     player2Selection.append(rock2Div);
     player2Selection.append(paper2Div);
@@ -104,10 +105,10 @@ $("#startGame").on("click", function (event) {
 
         dataRef.ref("/players/1").set({
             name: player1name,
-            selection: player1selection,
+            player1selection: player1selection,
             wins: player1wins,
             losses: player1losses,
-            turn: turnplayer1,
+            turnplayer1: turnplayer1,
         })
 
 
@@ -118,9 +119,9 @@ $("#startGame").on("click", function (event) {
 
         checkPlayer1.onDisconnect().remove();
     };
-    if (player1Exists != null) {
+    if (player1Exists != null & player2Exists == null) {
         //Add player 2 name
-        dataRef.ref("/players/1").on("value", function (snapshot) {
+        dataRef.ref("/players/1").once("value", function (snapshot) {
             player1name = snapshot.val().name
             console.log("El jugador 1 es: " + player1name);
 
@@ -128,27 +129,30 @@ $("#startGame").on("click", function (event) {
             console.log("Ponemos el jugador 2");
             player2name = $("#playerName").val().trim();
             $("#player1Section").text(player1name);
-
-            dataRef.ref("/players/2").set({
-                name: player2name,
-                selection: player2selection,
-                wins: player2wins,
-                losses: player2losses,
-                turn: turnplayer2,
-            });
-
-            //Give Turn to player 1
-            dataRef.ref().update({
-                turn: 1,
-            });
-
-
-            $("#ShowplayerName").html("Hi " + player2name + " you are player 2");
-            $("#player2Section").text(player2name);
-            player2Assign(player2wins, player2losses);
-
-
         })
+        dataRef.ref("/players/2").set({
+            name: player2name,
+            player2selection: player2selection,
+            wins: player2wins,
+            losses: player2losses,
+            turnplayer2: turnplayer2,
+        });
+
+
+
+
+        $("#ShowplayerName").html("Hi " + player2name + " you are player 2");
+        $("#player2Section").text(player2name);
+        player2Assign(player2wins, player2losses);
+
+
+
+
+        //Give Turn to player 1
+        dataRef.ref("/players/1").update({
+            turnplayer1: 1,
+        });
+
         checkPlayer2.onDisconnect().remove();
 
     }
@@ -158,81 +162,136 @@ $("#startGame").on("click", function (event) {
 //Player 1 choose     
 function player1Choose() {
     $("#player1Status").text("Your turn, please choose");
-    $(document).on("click", "#player1Rock", function () {
+    //If player 1  choose Rock
+    $(document).on("click", "#player1Rock", function (event) {
+        event.preventDefault();
         player1selection = $("#player1Rock").text();
         $("#player1Selection").empty();
         $("#player1Selection").html(player1selection);
         $("#player1Selection").addClass("Selection");
         dataRef.ref("/players/1").update({
-            selection: player1selection,
+            player1selection: player1selection,
+            turnplayer1: 3
         });
-        turnplayer1 = 1;
+        dataRef.ref("/players/2").update({
+            turnplayer2: 1,
+        });
     });
-    $(document).on("click", "#player1Paper", function () {
+    //If player 1  choose Paper
+    $(document).on("click", "#player1Paper", function (event) {
+        event.preventDefault();
         player1selection = $("#player1Paper").text();
         $("#player1Selection").empty();
         $("#player1Selection").html(player1selection);
         $("#player1Selection").addClass("Selection");
         dataRef.ref("/players/1").update({
-            selection: player1selection,
+            player1selection: player1selection,
+            turnplayer1: 3
         });
-        turnplayer1 = 1;
+        dataRef.ref("/players/2").update({
+            turnplayer2: 1,
+        });
     });
-    $(document).on("click", "#player1Scissors", function () {
+    //If player 1  choose Scissors
+    $(document).on("click", "#player1Scissors", function (event) {
+        event.preventDefault();
         player1selection = $("#player1Scissors").text();
         $("#player1Selection").empty();
         $("#player1Selection").html(player1selection);
         $("#player1Selection").addClass("Selection");
         dataRef.ref("/players/1").update({
-            selection: player1selection,
+            player1selection: player1selection,
+            turnplayer1: 3
         });
-        turnplayer1 = 1;
-    })
+        dataRef.ref("/players/2").update({
+            turnplayer2: 1,
+        });
+    });
 }
 
 //Player 2 choose 
 function player2Choose() {
-    $("#player2Status").val("Your turn, please choose");
-    $(document).on("click", "#player2Rock", function () {
+    $("#player2Status").text("Your turn, please choose");
+    //If player 2 choose Rock
+    $(document).on("click", "#player2Rock", function (event) {
+        event.preventDefault();
         player2selection = $("#player2Rock").text();
         $("#player2Selection").empty();
         $("#player2Selection").html(player2selection);
         $("#player2Selection").addClass("Selection");
         dataRef.ref("/players/2").update({
-            selection: player2selection,
+            player2selection: player2selection,
         });
-
+        dataRef.ref("/players/2").update({
+            turnplayer2: 3,
+        });
     });
-    $(document).on("click", "#player2Paper", function () {
+    //If player 2 choose Paper
+    $(document).on("click", "#player2Paper", function (event) {
+        event.preventDefault();
         player2selection = $("#player2Paper").text();
         $("#player2Selection").empty();
         $("#player2Selection").html(player2selection);
         $("#player2Selection").addClass("Selection");
         dataRef.ref("/players/2").update({
-            selection: player2selection,
+            player2selection: player2selection,
         });
-
+        dataRef.ref("/players/2").update({
+            turnplayer2: 3,
+        });
     });
-    $(document).on("click", "#player2Scissors", function () {
+    //If player 2 choose Scissors
+    $(document).on("click", "#player2Scissors", function (event) {
+        event.preventDefault();
         player2selection = $("#player2Scissors").text();
         $("#player2Selection").empty();
         $("#player2Selection").html(player2selection);
         $("#player2Selection").addClass("Selection");
         dataRef.ref("/players/2").update({
-            selection: player2selection,
+            player2selection: player2selection,
         });
+        dataRef.ref("/players/2").update({
+            turnplayer2: 3,
+        });
+    });
 
-    })
 }
 
 
-dataRef.ref().on("child_changed", function (snapshot) {
-    player1Choose();
+dataRef.ref("/players").on("child_changed", function (snapshot) {
+    console.log("I move");
+    var playerturn1 = snapshot.val().turnplayer1;
+    var playerturn2 = snapshot.val().turnplayer2;
+    console.log("Playerturn1: " + playerturn1);
+    console.log("Playerturn2: " + playerturn2);
+    console.log(playerturn1);
+    if (playerturn1 === 1) {
+        console.log("It is player 1 turn");
+        player1Choose();
+    }
+    if (playerturn2 === 1) {
+        console.log("It is player 2 turn");
+        player2Choose();
+    }
+    if (playerturn2 === 3) {
+        console.log("It is time to compare");
+
+        dataRef.ref("/players/1").on("value", function (snapshot) {
+            player1selection = snapshot.val().player1selection;
+            console.log(player1selection);
+        })
+        dataRef.ref("/players/2").on("value", function (snapshot) {
+            player2selection = snapshot.val().player2selection;
+            console.log(player2selection);
+        })
+
+        console.log("The answer is " + (player1selection == player2selection));
+    
+    }
 });
 
-dataRef.ref("/players/1").on("child_changed", function (snapshot) {
-    player2Choose();
-});
+
+
 
 
 
