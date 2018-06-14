@@ -45,8 +45,6 @@ checkPlayer2.once("value", function (snapshot) {
 
 
 function player1Assign(player1wins, player1losses) {
-    var player1Selection = $("<div>");
-    player1Selection.attr("id", "player1Selection")
     var rock1Div = $("<div>");
     rock1Div.text("Rock");
     rock1Div.attr("id", "player1Rock");
@@ -60,17 +58,14 @@ function player1Assign(player1wins, player1losses) {
     score1Div.text("Wins: " + player1wins + " Losses: " + player1losses);
     var player1Status = $("<div>")
     player1Status.attr("id", "player1Status");
-    player1Selection.append(player1Status)
-    player1Selection.append(rock1Div);
-    player1Selection.append(paper1Div);
-    player1Selection.append(scissors1Div);
-    $("#player1Section").append(player1Selection)
-    $("#player1Section").append(score1Div);
+    $("#player1Selection").append(player1Status)
+    $("#player1Selection").append(rock1Div);
+    $("#player1Selection").append(paper1Div);
+    $("#player1Selection").append(scissors1Div);
+    $("#player1Selection").append(score1Div);
 }
 
 function player2Assign(player2wins, player2losses) {
-    var player2Selection = $("<div>");
-    player2Selection.attr("id", "player2Selection")
     var rock2Div = $("<div>");
     rock2Div.text("Rock");
     rock2Div.attr("id", "player2Rock");
@@ -85,11 +80,10 @@ function player2Assign(player2wins, player2losses) {
     var player2Status = $("<div>")
     player2Status.attr("id", "player2Status");
     player2Status.text("Waiting for player 1 to choose");
-    player2Selection.append(player2Status);
-    player2Selection.append(rock2Div);
-    player2Selection.append(paper2Div);
-    player2Selection.append(scissors2Div);
-    $("#player2Section").append(player2Selection)
+    $("#player2Selection").append(player2Status);
+    $("#player2Selection").append(rock2Div);
+    $("#player2Selection").append(paper2Div);
+    $("#player2Selection").append(scissors2Div);
     $("#player2Section").append(score2Div);
 }
 
@@ -113,7 +107,7 @@ $("#startGame").on("click", function (event) {
 
 
         $("#ShowplayerName").html("Hi " + player1name + " you are player 1");
-        $("#player1Section").text(player1name);
+        $("#player1Name").text(player1name);
         player1Assign(player1wins, player1losses);
 
 
@@ -128,7 +122,7 @@ $("#startGame").on("click", function (event) {
 
             console.log("Ponemos el jugador 2");
             player2name = $("#playerName").val().trim();
-            $("#player1Section").text(player1name);
+           
         })
         dataRef.ref("/players/2").set({
             name: player2name,
@@ -142,7 +136,9 @@ $("#startGame").on("click", function (event) {
 
 
         $("#ShowplayerName").html("Hi " + player2name + " you are player 2");
-        $("#player2Section").text(player2name);
+        $("#player1Name").text(player1name);
+        $("#player2Name").text(player2name);
+        //player1Assign(player1wins, player1losses);
         player2Assign(player2wins, player2losses);
 
 
@@ -259,6 +255,7 @@ function player2Choose() {
 
 
 dataRef.ref("/players").on("child_changed", function (snapshot) {
+    
     console.log("I move");
     var playerturn1 = snapshot.val().turnplayer1;
     var playerturn2 = snapshot.val().turnplayer2;
@@ -267,6 +264,10 @@ dataRef.ref("/players").on("child_changed", function (snapshot) {
     console.log(playerturn1);
     if (playerturn1 === 1) {
         console.log("It is player 1 turn");
+       dataRef.ref("/players/2").once("value",function(snapshot){
+           player2name=snapshot.val().name;
+           $("#player2Name").text(player2name);
+       });
         player1Choose();
     }
     if (playerturn2 === 1) {
