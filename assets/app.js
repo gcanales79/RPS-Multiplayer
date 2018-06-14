@@ -62,7 +62,7 @@ function player1Assign(player1wins, player1losses) {
     $("#player1Selection").append(rock1Div);
     $("#player1Selection").append(paper1Div);
     $("#player1Selection").append(scissors1Div);
-    $("#player1Selection").append(score1Div);
+    $("#player1Score").append(score1Div);
 }
 
 function player2Assign(player2wins, player2losses) {
@@ -84,7 +84,7 @@ function player2Assign(player2wins, player2losses) {
     $("#player2Selection").append(rock2Div);
     $("#player2Selection").append(paper2Div);
     $("#player2Selection").append(scissors2Div);
-    $("#player2Section").append(score2Div);
+    $("#player2Score").append(score2Div);
 }
 
 
@@ -294,12 +294,35 @@ dataRef.ref("/players").on("child_changed", function (snapshot) {
         $("#player1Selection").html(player1selection);
         $("#player1Selection").addClass("Selection");
 
-        console.log("The answer is " + (player1selection == player2selection));
+        RPS(player1selection,player2selection);
     
     }
 });
 
-
+//Function to compare the game
+function RPS(player1selection,player2selection){
+    if(player1selection==player2selection){
+        console.log("It is a tie")
+    };
+    if(player1selection=="Rock" & player2selection=="Paper"){
+        console.log("Player 2 wins")
+    };
+    if(player1selection=="Rock" & player2selection=="Scissors"){
+        console.log("Player 1 wins")
+    };
+    if(player1selection=="Paper" & player2selection=="Rock"){
+        console.log("Player 1 wins")
+    };
+    if(player1selection=="Paper" & player2selection=="Scissors"){
+        console.log("Player 2 wins")
+    };
+    if(player1selection=="Scissors" & player2selection=="Rock"){
+        console.log("Player 2 wins")
+    };
+    if(player1selection=="Scissors" & player2selection=="Paper"){
+        console.log("Player 1 wins")
+    };
+};
 
 
 
