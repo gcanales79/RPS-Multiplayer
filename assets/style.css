@@ -1,11 +1,11 @@
 #player1Section {
-    height: 200px;
+    height: 250px;
     border: 1px black solid;
     
 }
 
 #player2Section{
-    height: 200px;
+    height: 250px;
     border: 1px black solid;
 
 }
@@ -34,12 +34,11 @@ body{
 
 .Selection{
     font-weight:bold;
-    font-size: 50px;
-}
+    }
 
 #resultSection{
     font-weight:bold;
-    font-size: 50px;
+    
 }
 
 #player1Rock{

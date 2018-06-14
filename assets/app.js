@@ -44,7 +44,7 @@ checkPlayer2.once("value", function (snapshot) {
 });
 
 
-function player1Assign(player1wins, player1losses) {
+function player1Assign() {
     var rock1Div = $("<div>");
     rock1Div.text("Rock");
     rock1Div.attr("id", "player1Rock");
@@ -55,17 +55,14 @@ function player1Assign(player1wins, player1losses) {
     scissors1Div.text("Scissors");
     scissors1Div.attr("id", "player1Scissors")
     var score1Div = $("<div>");
-    score1Div.text("Wins: " + player1wins + " Losses: " + player1losses);
-    var player1Status = $("<div>")
-    player1Status.attr("id", "player1Status");
-    $("#player1Selection").append(player1Status)
-    $("#player1Selection").append(rock1Div);
-    $("#player1Selection").append(paper1Div);
-    $("#player1Selection").append(scissors1Div);
+    
+     $("#RPSsectionPlayer1").append(rock1Div);
+    $("#RPSsectionPlayer1").append(paper1Div);
+    $("#RPSsectionPlayer1").append(scissors1Div);
     $("#player1Score").append(score1Div);
 }
 
-function player2Assign(player2wins, player2losses) {
+function player2Assign() {
     var rock2Div = $("<div>");
     rock2Div.text("Rock");
     rock2Div.attr("id", "player2Rock");
@@ -76,14 +73,12 @@ function player2Assign(player2wins, player2losses) {
     scissors2Div.text("Scissors");
     scissors2Div.attr("id", "player2Scissors")
     var score2Div = $("<div>");
-    score2Div.text("Wins: " + player2wins + " Losses: " + player2losses);
-    var player2Status = $("<div>")
-    player2Status.attr("id", "player2Status");
-    player2Status.text("Waiting for player 1 to choose");
-    $("#player2Selection").append(player2Status);
-    $("#player2Selection").append(rock2Div);
-    $("#player2Selection").append(paper2Div);
-    $("#player2Selection").append(scissors2Div);
+    
+    $("#player2Status").text("Waiting for player 1 to choose");
+    
+    $("#RPSsectionPlayer2").append(rock2Div);
+    $("#RPSsectionPlayer2").append(paper2Div);
+    $("#RPSsectionPlayer2").append(scissors2Div);
     $("#player2Score").append(score2Div);
 }
 
@@ -109,11 +104,18 @@ $("#startGame").on("click", function (event) {
         $("#ShowplayerName").html("Hi " + player1name + " you are player 1");
         $("#player1Name").text(player1name);
         player1Assign(player1wins, player1losses);
+        //hide the DIV of RPS and Status of Player 2 
+        $("#RPSsectionPlayer2").hide();
+        $("#player2Status").hide();
 
 
         checkPlayer1.onDisconnect().remove();
     };
     if (player1Exists != null & player2Exists == null) {
+        //To be able to start a new game once disconnected
+        resetGame();
+
+
         //Add player 2 name
         dataRef.ref("/players/1").once("value", function (snapshot) {
             player1name = snapshot.val().name
@@ -131,8 +133,9 @@ $("#startGame").on("click", function (event) {
             losses: player2losses,
             turnplayer2: turnplayer2,
         });
-
-
+        //Hide the RPS and Status section of Player 1
+        $("#RPSsectionPlayer1").hide();
+        $("#player1Status").hide();
 
 
         $("#ShowplayerName").html("Hi " + player2name + " you are player 2");
@@ -143,13 +146,18 @@ $("#startGame").on("click", function (event) {
 
 
 
+        setTimeout(test(),3*1000)
 
+        function test(){
         //Give Turn to player 1
         dataRef.ref("/players/1").update({
             turnplayer1: 1,
         });
+    }
 
+        
         checkPlayer2.onDisconnect().remove();
+        
 
     }
 })
@@ -162,7 +170,7 @@ function player1Choose() {
     $(document).on("click", "#player1Rock", function (event) {
         event.preventDefault();
         player1selection = $("#player1Rock").text();
-        $("#player1Selection").empty();
+        $("#RPSsectionPlayer1").empty();
         $("#player1Selection").html(player1selection);
         $("#player1Selection").addClass("Selection");
         dataRef.ref("/players/1").update({
@@ -177,7 +185,7 @@ function player1Choose() {
     $(document).on("click", "#player1Paper", function (event) {
         event.preventDefault();
         player1selection = $("#player1Paper").text();
-        $("#player1Selection").empty();
+        $("#RPSsectionPlayer1").empty();
         $("#player1Selection").html(player1selection);
         $("#player1Selection").addClass("Selection");
         dataRef.ref("/players/1").update({
@@ -192,7 +200,7 @@ function player1Choose() {
     $(document).on("click", "#player1Scissors", function (event) {
         event.preventDefault();
         player1selection = $("#player1Scissors").text();
-        $("#player1Selection").empty();
+        $("#RPSsectionPlayer1").empty();
         $("#player1Selection").html(player1selection);
         $("#player1Selection").addClass("Selection");
         dataRef.ref("/players/1").update({
@@ -212,7 +220,7 @@ function player2Choose() {
     $(document).on("click", "#player2Rock", function (event) {
         event.preventDefault();
         player2selection = $("#player2Rock").text();
-        $("#player2Selection").empty();
+        $("#RPSsectionPlayer2").empty();
         $("#player2Selection").html(player2selection);
         $("#player2Selection").addClass("Selection");
         dataRef.ref("/players/2").update({
@@ -226,7 +234,7 @@ function player2Choose() {
     $(document).on("click", "#player2Paper", function (event) {
         event.preventDefault();
         player2selection = $("#player2Paper").text();
-        $("#player2Selection").empty();
+        $("#RPSsectionPlayer2").empty();
         $("#player2Selection").html(player2selection);
         $("#player2Selection").addClass("Selection");
         dataRef.ref("/players/2").update({
@@ -240,7 +248,7 @@ function player2Choose() {
     $(document).on("click", "#player2Scissors", function (event) {
         event.preventDefault();
         player2selection = $("#player2Scissors").text();
-        $("#player2Selection").empty();
+        $("#RPSsectionPlayer2").empty();
         $("#player2Selection").html(player2selection);
         $("#player2Selection").addClass("Selection");
         dataRef.ref("/players/2").update({
@@ -306,6 +314,10 @@ function RPS(player1selection,player2selection){
         $("#resultSection").text("Tie");
         $("#player1Score").text("Wins: " + player1wins + " Losses: " + player1losses);
         $("#player2Score").text("Wins: " + player2wins + " Losses: " + player2losses);
+        setTimeout(function(){
+            prepareFornewGameplayer1();
+            prepareFornewGameplayer2();
+        },5*1000);
     
     };
     if(player1selection=="Rock" & player2selection=="Paper"){
@@ -315,8 +327,10 @@ function RPS(player1selection,player2selection){
         player1losses++;
         $("#player1Score").text("Wins: " + player1wins + " Losses: " + player1losses);
         $("#player2Score").text("Wins: " + player2wins + " Losses: " + player2losses);
-        prepareFornewGameplayer1();
-        prepareFornewGameplayer2();
+        setTimeout(function(){
+            prepareFornewGameplayer1();
+            prepareFornewGameplayer2();
+        },5*1000);
         
     };
     if(player1selection=="Rock" & player2selection=="Scissors"){
@@ -326,6 +340,10 @@ function RPS(player1selection,player2selection){
         player2losses++;
         $("#player1Score").text("Wins: " + player1wins + " Losses: " + player1losses);
         $("#player2Score").text("Wins: " + player2wins + " Losses: " + player2losses);
+        setTimeout(function(){
+            prepareFornewGameplayer1();
+            prepareFornewGameplayer2();
+        },5*1000);
     };
     if(player1selection=="Paper" & player2selection=="Rock"){
         console.log("Player 1 wins")
@@ -334,6 +352,10 @@ function RPS(player1selection,player2selection){
         player2losses++;
         $("#player1Score").text("Wins: " + player1wins + " Losses: " + player1losses);
         $("#player2Score").text("Wins: " + player2wins + " Losses: " + player2losses);
+        setTimeout(function(){
+            prepareFornewGameplayer1();
+            prepareFornewGameplayer2();
+        },5*1000);
     
     };
     if(player1selection=="Paper" & player2selection=="Scissors"){
@@ -343,6 +365,10 @@ function RPS(player1selection,player2selection){
         player1losses++;
         $("#player1Score").text("Wins: " + player1wins + " Losses: " + player1losses);
         $("#player2Score").text("Wins: " + player2wins + " Losses: " + player2losses);
+        setTimeout(function(){
+            prepareFornewGameplayer1();
+            prepareFornewGameplayer2();
+        },5*1000);
 
     };
     if(player1selection=="Scissors" & player2selection=="Rock"){
@@ -352,6 +378,10 @@ function RPS(player1selection,player2selection){
         player1losses++;
         $("#player1Score").text("Wins: " + player1wins + " Losses: " + player1losses);
         $("#player2Score").text("Wins: " + player2wins + " Losses: " + player2losses);
+        setTimeout(function(){
+            prepareFornewGameplayer1();
+            prepareFornewGameplayer2();
+        },5*1000);
     };
     if(player1selection=="Scissors" & player2selection=="Paper"){
         console.log("Player 1 wins")
@@ -360,6 +390,10 @@ function RPS(player1selection,player2selection){
         player2losses++;
         $("#player1Score").text("Wins: " + player1wins + " Losses: " + player1losses);
         $("#player2Score").text("Wins: " + player2wins + " Losses: " + player2losses);
+        setTimeout(function(){
+            prepareFornewGameplayer1();
+            prepareFornewGameplayer2();
+        },5*1000);;
     };
 };
 
@@ -367,6 +401,7 @@ function RPS(player1selection,player2selection){
 function prepareFornewGameplayer1(){
     $("#resultSection").empty();
     $("#player1Selection").empty();
+    $("#RPSsectionPlayer1").empty();
     $("#player2Selection").empty();
     $("#player1Selection").removeClass("Selection");
     player1Assign();
@@ -387,6 +422,7 @@ function prepareFornewGameplayer2(){
     $("#resultSection").empty();
     //$("#player1Selection").empty();
     $("#player2Selection").empty();
+    $("#RPSsectionPlayer2").empty();
     $("#player2Selection").removeClass("Selection");
     player2Assign();
     dataRef.ref("/players/1").update({
@@ -398,5 +434,21 @@ function prepareFornewGameplayer2(){
 }
 
 
+function resetGame(){
+    $("#resultSection").empty();
+    $("#player1Selection").empty();
+    $("#RPSsectionPlayer1").empty();
+    $("#player2Selection").empty();
+    $("#player1Selection").removeClass("Selection");
+    player1Assign();
+    dataRef.ref("/players/1").update({
+        turnplayer1: 0,
+        player1selection:"",
+    });
+  
+    $(document).off("click", "#player1Rock")
+    $(document).off("click", "#player1Paper")
+    $(document).off("click", "#player1Scissors")
+}
 
 
