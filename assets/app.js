@@ -310,15 +310,18 @@ function RPS(player1selection,player2selection){
     };
     if(player1selection=="Rock" & player2selection=="Paper"){
         console.log("Player 2 wins")
-        $("#resultSection").text("Player 2 Wins");
+        $("#resultSection").text("Player 2 Win");
         player2wins++;
         player1losses++;
         $("#player1Score").text("Wins: " + player1wins + " Losses: " + player1losses);
         $("#player2Score").text("Wins: " + player2wins + " Losses: " + player2losses);
+        prepareFornewGameplayer1();
+        prepareFornewGameplayer2();
+        
     };
     if(player1selection=="Rock" & player2selection=="Scissors"){
         console.log("Player 1 wins")
-        $("#resultSection").text("Player 1 Wins");
+        $("#resultSection").text("Player 1 Win");
         player1wins++;
         player2losses++;
         $("#player1Score").text("Wins: " + player1wins + " Losses: " + player1losses);
@@ -326,7 +329,7 @@ function RPS(player1selection,player2selection){
     };
     if(player1selection=="Paper" & player2selection=="Rock"){
         console.log("Player 1 wins")
-        $("#resultSection").text("Player 1 Wins");
+        $("#resultSection").text("Player 1 Win");
         player1wins++;
         player2losses++;
         $("#player1Score").text("Wins: " + player1wins + " Losses: " + player1losses);
@@ -335,7 +338,7 @@ function RPS(player1selection,player2selection){
     };
     if(player1selection=="Paper" & player2selection=="Scissors"){
         console.log("Player 2 wins")
-        $("#resultSection").text("Player 2 Wins");
+        $("#resultSection").text("Player 2 Win");
         player2wins++;
         player1losses++;
         $("#player1Score").text("Wins: " + player1wins + " Losses: " + player1losses);
@@ -344,7 +347,7 @@ function RPS(player1selection,player2selection){
     };
     if(player1selection=="Scissors" & player2selection=="Rock"){
         console.log("Player 2 wins")
-        $("#resultSection").text("Player 2 Wins");
+        $("#resultSection").text("Player 2 Win");
         player2wins++;
         player1losses++;
         $("#player1Score").text("Wins: " + player1wins + " Losses: " + player1losses);
@@ -352,7 +355,7 @@ function RPS(player1selection,player2selection){
     };
     if(player1selection=="Scissors" & player2selection=="Paper"){
         console.log("Player 1 wins")
-        $("#resultSection").text("Player 1 Wins");
+        $("#resultSection").text("Player 1 Win");
         player1wins++;
         player2losses++;
         $("#player1Score").text("Wins: " + player1wins + " Losses: " + player1losses);
@@ -361,7 +364,38 @@ function RPS(player1selection,player2selection){
 };
 
 
+function prepareFornewGameplayer1(){
+    $("#resultSection").empty();
+    $("#player1Selection").empty();
+    $("#player2Selection").empty();
+    $("#player1Selection").removeClass("Selection");
+    player1Assign();
+    dataRef.ref("/players/1").update({
+        turnplayer1: 0,
+        player1selection:"",
+    });
+    dataRef.ref("/players/2").update({
+        turnplayer2:0,
+        player2selection:"",
+    })
+    $(document).off("click", "#player1Rock")
+    $(document).off("click", "#player1Paper")
+    $(document).off("click", "#player1Scissors")
+}
 
+function prepareFornewGameplayer2(){
+    $("#resultSection").empty();
+    //$("#player1Selection").empty();
+    $("#player2Selection").empty();
+    $("#player2Selection").removeClass("Selection");
+    player2Assign();
+    dataRef.ref("/players/1").update({
+        turnplayer1: 1,
+    });
+    $(document).off("click", "#player2Rock")
+    $(document).off("click", "#player2Paper")
+    $(document).off("click", "#player2Scissors")
+}
 
 
 
