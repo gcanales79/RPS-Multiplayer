@@ -37,3 +37,55 @@ body{
     font-size: 50px;
 }
 
+#resultSection{
+    font-weight:bold;
+    font-size: 50px;
+}
+
+#player1Rock{
+    cursor: pointer;
+}
+
+#player1Rock:hover{
+    color:blue;
+}
+
+#player1Paper{
+    cursor: pointer;
+}
+
+#player1Paper:hover{
+    color:blue;
+}
+
+#player1Scissors{
+    cursor: pointer;
+}
+
+#player1Scissors:hover{
+    color:blue;
+}
+
+#player2Rock{
+    cursor: pointer;
+}
+
+#player2Rock:hover{
+    color:blue;
+}
+
+#player2Paper{
+    cursor: pointer;
+}
+
+#player2Paper:hover{
+    color:blue;
+}
+
+#player2Scissors{
+    cursor: pointer;
+}
+
+#player2Scissors:hover{
+    color:blue;
+}

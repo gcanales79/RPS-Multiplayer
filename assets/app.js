@@ -303,24 +303,60 @@ dataRef.ref("/players").on("child_changed", function (snapshot) {
 function RPS(player1selection,player2selection){
     if(player1selection==player2selection){
         console.log("It is a tie")
+        $("#resultSection").text("Tie");
+        $("#player1Score").text("Wins: " + player1wins + " Losses: " + player1losses);
+        $("#player2Score").text("Wins: " + player2wins + " Losses: " + player2losses);
+    
     };
     if(player1selection=="Rock" & player2selection=="Paper"){
         console.log("Player 2 wins")
+        $("#resultSection").text("Player 2 Wins");
+        player2wins++;
+        player1losses++;
+        $("#player1Score").text("Wins: " + player1wins + " Losses: " + player1losses);
+        $("#player2Score").text("Wins: " + player2wins + " Losses: " + player2losses);
     };
     if(player1selection=="Rock" & player2selection=="Scissors"){
         console.log("Player 1 wins")
+        $("#resultSection").text("Player 1 Wins");
+        player1wins++;
+        player2losses++;
+        $("#player1Score").text("Wins: " + player1wins + " Losses: " + player1losses);
+        $("#player2Score").text("Wins: " + player2wins + " Losses: " + player2losses);
     };
     if(player1selection=="Paper" & player2selection=="Rock"){
         console.log("Player 1 wins")
+        $("#resultSection").text("Player 1 Wins");
+        player1wins++;
+        player2losses++;
+        $("#player1Score").text("Wins: " + player1wins + " Losses: " + player1losses);
+        $("#player2Score").text("Wins: " + player2wins + " Losses: " + player2losses);
+    
     };
     if(player1selection=="Paper" & player2selection=="Scissors"){
         console.log("Player 2 wins")
+        $("#resultSection").text("Player 2 Wins");
+        player2wins++;
+        player1losses++;
+        $("#player1Score").text("Wins: " + player1wins + " Losses: " + player1losses);
+        $("#player2Score").text("Wins: " + player2wins + " Losses: " + player2losses);
+
     };
     if(player1selection=="Scissors" & player2selection=="Rock"){
         console.log("Player 2 wins")
+        $("#resultSection").text("Player 2 Wins");
+        player2wins++;
+        player1losses++;
+        $("#player1Score").text("Wins: " + player1wins + " Losses: " + player1losses);
+        $("#player2Score").text("Wins: " + player2wins + " Losses: " + player2losses);
     };
     if(player1selection=="Scissors" & player2selection=="Paper"){
         console.log("Player 1 wins")
+        $("#resultSection").text("Player 1 Wins");
+        player1wins++;
+        player2losses++;
+        $("#player1Score").text("Wins: " + player1wins + " Losses: " + player1losses);
+        $("#player2Score").text("Wins: " + player2wins + " Losses: " + player2losses);
     };
 };
 
